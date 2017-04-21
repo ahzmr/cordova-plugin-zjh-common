@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:rim="http://www.blackberry.com/ns/widgets"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest"
+    xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+    id="cordova-plugin-zjh-common"
+    version="1.0.0">
+
+    <name>ZjhCommon</name>
+    <description>Zjh Common Plugin</description>
+    <keywords>cordova,zjh,common</keywords>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="ZjhPlugin">
+                <param name="android-package" value="com.zhijianhuo.cordova.plugin.ZjhPlugin"/>
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/com/zhijianhuo/cordova/core/demain/SimpleResult.java" target-dir="src/com/zhijianhuo/cordova/core/demain" />
+        <source-file src="src/android/com/zhijianhuo/cordova/core/plugin/BasePlugin.java" target-dir="src/com/zhijianhuo/cordova/core/plugin" />
+        <source-file src="src/android/com/zhijianhuo/cordova/core/util/HttpUtils.java" target-dir="src/com/zhijianhuo/cordova/core/util" />
+        <source-file src="src/android/com/zhijianhuo/cordova/core/util/IOUtils.java" target-dir="src/com/zhijianhuo/cordova/core/util" />
+
+        <source-file src="src/android/com/zhijianhuo/cordova/plugin/support/GetTaoBaoIdPlugin.java" target-dir="src/com/zhijianhuo/cordova/plugin/support" />
+        <source-file src="src/android/com/zhijianhuo/cordova/plugin/ZjhPlugin.java" target-dir="src/com/zhijianhuo/cordova/plugin" />
+    </platform>
+
+    <!-- ios -->
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="ZjhPlugin">
+                <param name="ios-package" value="ZjhPlugin"/>
+            </feature>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
+            <array>
+                <string>taobao</string>
+                <string>openApp.jdMobile</string>
+                <string>tmall</string>
+                <string>mogujie</string>
+                <string>meilishuo</string>
+            </array>
+        </config-file>
+
+        <header-file src="src/ios/ZjhPlugin.h" />
+        <source-file src="src/ios/ZjhPlugin.m" />
+    </platform>
+
+</plugin>
