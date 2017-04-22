@@ -5,16 +5,18 @@
     xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest"
     xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
     id="cordova-plugin-zjh-common"
-    version="1.0.0">
+    version="1.0.1">
 
     <name>ZjhCommon</name>
     <description>Zjh Common Plugin</description>
     <keywords>cordova,zjh,common</keywords>
 
+    <preference name="PLUGIN_NAME" default="ZjhPlugin" />
+
     <!-- android -->
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="ZjhPlugin">
+            <feature name="$PLUGIN_NAME">
                 <param name="android-package" value="com.zhijianhuo.cordova.plugin.ZjhPlugin"/>
             </feature>
         </config-file>
@@ -31,7 +33,7 @@
     <!-- ios -->
     <platform name="ios">
         <config-file target="config.xml" parent="/*">
-            <feature name="ZjhPlugin">
+            <feature name="$PLUGIN_NAME">
                 <param name="ios-package" value="ZjhPlugin"/>
             </feature>
         </config-file>
