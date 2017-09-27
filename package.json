@@ -1,7 +1,7 @@
 {
   "name": "cordova-plugin-zjh-common",
-  "version": "1.0.0",
-  "description": "Zjh Common Plugin",
+  "version": "2.0.0",
+  "description": "Zhijianhuo Common Plugin",
   "cordova": {
     "id": "cordova-plugin-contacts",
     "platforms": [
@@ -16,8 +16,8 @@
   "keywords": [
     "cordova",
     "zjh",
+    "zhijianhuo",
     "common",
-    "ecosystem:cordova",
     "cordova-android",
     "cordova-ios"
   ],

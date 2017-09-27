@@ -171,4 +171,55 @@
         [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
     }];
 }
+
+- (void)saveImages:(CDVInvokedUrlCommand *)command
+{
+    NSArray *arguments = command.arguments;
+    CDVPluginResult* result = nil;
+    if (arguments.count == 1) {
+        NSArray* files = [command argumentAtIndex:0];
+        @autoreleasepool {
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            formatter.dateFormat = @"yyMMdd_HHmmss";
+
+            for (NSDictionary *file in files) {
+                NSString *url = file[@"url"];
+
+                NSData *data = nil;
+
+                if ([url hasPrefix:@"http://"] || [url hasPrefix:@"https://"]) {
+                    data = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
+                } else if ([url hasPrefix:@"data:image"]) {
+                    // a base 64 string
+                    NSURL *base64URL = [NSURL URLWithString:url];
+                    data = [NSData dataWithContentsOfURL:base64URL];
+                }
+                if(data) {
+                    UIImage *image = [UIImage imageWithData:data];
+                    UIImageWriteToSavedPhotosAlbum(image, self, NULL, NULL);
+                }
+            }
+        }
+    }
+    result = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:@"保存成功"];
+    return [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+}
+
+/* 得到文件名 */
+- (NSString *)getFileName:(NSString *)url {
+    if(!url || url.length == 0) {
+        return nil;
+    }
+    NSRange idx = [url rangeOfString:@"?"];
+    if(NSNotFound != idx.location) {
+        url = [url substringToIndex:idx.location];
+    }
+    NSRange startRange = [url rangeOfString:@"/" options:NSBackwardsSearch];
+    NSUInteger startIdx = startRange.location == NSNotFound ? 0 : startRange.location + 1;
+    NSString *fileName = [url substringFromIndex:startIdx];
+    if(![fileName containsString:@"."]) {
+        fileName = [fileName stringByAppendingString:@".jpg"];
+    }
+    return fileName;
+}
 @end

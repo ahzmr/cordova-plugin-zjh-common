@@ -23,4 +23,6 @@
 - (void)getTbIdForUrl:(CDVInvokedUrlCommand *)command;
 
 - (void)clearCache:(CDVInvokedUrlCommand *)command;
+
+- (void)saveImages:(CDVInvokedUrlCommand *)command;
 @end

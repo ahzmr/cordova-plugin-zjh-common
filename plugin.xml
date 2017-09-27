@@ -3,18 +3,18 @@
     xmlns:rim="http://www.blackberry.com/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest"
-    xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
     id="cordova-plugin-zjh-common"
-    version="1.0.1">
+    version="2.0.0">
 
     <name>ZjhCommon</name>
-    <description>Zjh Common Plugin</description>
-    <keywords>cordova,zjh,common</keywords>
+    <description>Zhijianhuo Common Plugin</description>
+    <keywords>cordova,zjh,zhijianhuo,common</keywords>
 
     <preference name="PLUGIN_NAME" default="ZjhPlugin" />
 
     <!-- android -->
     <platform name="android">
+        <preference name="IMAGE_DIR_NAME" default="" />
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="$PLUGIN_NAME">
                 <param name="android-package" value="com.zhijianhuo.cordova.plugin.ZjhPlugin"/>
@@ -27,6 +27,7 @@
         <source-file src="src/android/com/zhijianhuo/cordova/core/util/IOUtils.java" target-dir="src/com/zhijianhuo/cordova/core/util" />
 
         <source-file src="src/android/com/zhijianhuo/cordova/plugin/support/GetTaoBaoIdPlugin.java" target-dir="src/com/zhijianhuo/cordova/plugin/support" />
+        <source-file src="src/android/com/zhijianhuo/cordova/plugin/support/SaveImagesPlugin.java" target-dir="src/com/zhijianhuo/cordova/plugin/support" />
         <source-file src="src/android/com/zhijianhuo/cordova/plugin/ZjhPlugin.java" target-dir="src/com/zhijianhuo/cordova/plugin" />
     </platform>
 
@@ -40,6 +41,8 @@
 
         <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
             <array>
+                <string>weixin</string>
+                <string>wechat</string>
                 <string>taobao</string>
                 <string>openApp.jdMobile</string>
                 <string>tmall</string>
