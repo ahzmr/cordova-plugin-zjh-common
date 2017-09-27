@@ -1,5 +1,6 @@
 package com.zhijianhuo.cordova.plugin;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -26,6 +27,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TimerTask;
 
 /**
  * 淘客原生接口
@@ -33,11 +35,14 @@ import java.util.List;
  */
 
 public class ZjhPlugin extends BasePlugin {
-    public static final int REQUEST_CODE = 819;
+    public static final int REQUEST_PERMISS_CODE = 819;
+    public static final int REQUEST_PERMISS_SAVE_IMAGE_CODE = 8191;
     public static String IMAGE_DIR_NAME = null;
 
     private static final String LOG_TAG = "ZjhPlugin";
     private CallbackContext callbackContext;
+    private JSONArray args;
+    private String action;
 
     @Override
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
@@ -59,6 +64,8 @@ public class ZjhPlugin extends BasePlugin {
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
         this.callbackContext = callbackContext;
+        this.args = args;
+        this.action = action;
         if ("getAuthInfo".equals(action) || "getCookies".equals(action)) {
             String url = args.optString(0);
             if (null == url || url.isEmpty()) {
@@ -125,6 +132,11 @@ public class ZjhPlugin extends BasePlugin {
             SimpleResult<String> result = new GetTaoBaoIdPlugin().getTBId(args.optString(0));
             returnForSimpleResult(callbackContext, result);
         } else if("saveImages".equals(action)) {
+            String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+            if(!hasPermisssion(permissions)) {
+                requestPermissions(REQUEST_PERMISS_SAVE_IMAGE_CODE, permissions);
+                return true;
+            }
             SimpleResult<List<String>> result = SaveImagesPlugin.saveImages(cordova.getActivity().getApplication(), args.getJSONArray(0));
             returnForSimpleResult(callbackContext, result);
         } else if("hasPermisssion".equals(action)) {
@@ -134,7 +146,7 @@ public class ZjhPlugin extends BasePlugin {
                 callbackContext.error("Permission Denied!");
             }
         } else if("requestPermissions".equals(action)) {
-            requestPermissions(REQUEST_CODE, getPermisssions(args.optJSONArray(0)));
+            requestPermissions(REQUEST_PERMISS_CODE, getPermisssions(args.optJSONArray(0)));
         } else {
             return false;
         }
@@ -185,9 +197,8 @@ public class ZjhPlugin extends BasePlugin {
      */
     public void onRequestPermissionResult(int requestCode, String[] permissions,
                                           int[] grantResults) throws JSONException {
-        if(REQUEST_CODE != requestCode) {
-            return;
-        }
+        switch (requestCode) {
+            case REQUEST_PERMISS_CODE:
         for (int r : grantResults) {
             if (r == PackageManager.PERMISSION_DENIED) {
                 this.callbackContext.error("Permission Denied!");
@@ -195,5 +206,21 @@ public class ZjhPlugin extends BasePlugin {
             }
         }
         this.callbackContext.success(new JSONArray(Arrays.asList(permissions)));
+                break;
+            case REQUEST_PERMISS_SAVE_IMAGE_CODE:
+                if(null != callbackContext && null != args) {
+                    this.cordova.getThreadPool().submit(new TimerTask() {
+                        @Override
+                        public void run() {
+                            try {
+                                execute(action, args, callbackContext);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                }
+                break;
+        }
     }
 }

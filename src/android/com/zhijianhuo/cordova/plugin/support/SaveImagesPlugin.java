@@ -55,20 +55,13 @@ public class SaveImagesPlugin {
 
         InputStream inputStream = null;
         BufferedOutputStream output = null;
-
+                HttpURLConnection get = null;
         try {
             if(url.startsWith("http")) {
-                HttpURLConnection get = null;
-                try {
-                    get = HttpUtils.getDefaultConn(url, "GET");
-                    inputStream = get.getInputStream();
-                    if(null == fileName) {
-                        fileName = getFileName(url);
-                    }
-                } finally {
-                    if(null != get) {
-                        get.disconnect();
-                    }
+                get = HttpUtils.getDefaultConn(url, "GET");
+                inputStream = get.getInputStream();
+                if(null == fileName) {
+                    fileName = getFileName(url);
                 }
             } else if (url.startsWith("data:image")) {  // base64 image
                 String imageDataBytes = url.substring(url.indexOf(",") + 1);
@@ -105,6 +98,9 @@ public class SaveImagesPlugin {
         } finally {
             IOUtils.closeQuietly(inputStream);
             IOUtils.closeQuietly(output);
+            if(null != get) {
+                get.disconnect();
+            }
         }
         return formatPath(url);
     }

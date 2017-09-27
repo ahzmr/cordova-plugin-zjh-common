@@ -14,7 +14,7 @@
 
     <!-- android -->
     <platform name="android">
-        <preference name="IMAGE_DIR_NAME" default="" />
+        <preference name="IMAGE_DIR_NAME" default=" " />
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="$PLUGIN_NAME">
                 <param name="android-package" value="com.zhijianhuo.cordova.plugin.ZjhPlugin"/>
