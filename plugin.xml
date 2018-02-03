@@ -11,7 +11,7 @@
 
     <!-- android -->
     <platform name="android">
-        <preference name="IMAGE_DIR_NAME" value=" " />
+        <preference name="IMAGE_DIR_NAME" default="" />
 
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="$PLUGIN_NAME">
