@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-    xmlns:rim="http://www.blackberry.com/ns/widgets"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest"
-    id="cordova-plugin-zjh-common"
-    version="2.0.0">
+        id="cordova-plugin-zjh-common"
+        version="2.0.1">
 
     <name>ZjhCommon</name>
     <description>Zhijianhuo Common Plugin</description>
@@ -14,7 +11,8 @@
 
     <!-- android -->
     <platform name="android">
-        <preference name="IMAGE_DIR_NAME" default=" " />
+        <preference name="IMAGE_DIR_NAME" value=" " />
+
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="$PLUGIN_NAME">
                 <param name="android-package" value="com.zhijianhuo.cordova.plugin.ZjhPlugin"/>
@@ -37,6 +35,11 @@
             <feature name="$PLUGIN_NAME">
                 <param name="ios-package" value="ZjhPlugin"/>
             </feature>
+        </config-file>
+
+        <preference name="$PHOTOLIBRARY_ADD_USAGE_DESCRIPTION" default=" " />
+        <config-file target="*-Info.plist" parent="NSPhotoLibraryAddUsageDescription">
+            <string>$PHOTOLIBRARY_ADD_USAGE_DESCRIPTION</string>
         </config-file>
 
         <config-file target="*-Info.plist" parent="LSApplicationQueriesSchemes">
