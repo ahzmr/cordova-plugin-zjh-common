@@ -7,6 +7,7 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -23,6 +24,8 @@ public class BasePlugin extends CordovaPlugin {
                 callbackContext.success((String) result);
             } else if(result instanceof JSONArray) {
                 callbackContext.success((JSONArray) result);
+            } else if(result instanceof Collection) {
+                callbackContext.success(new JSONArray((Collection) result));
             } else if(result instanceof JSONObject) {
                 callbackContext.success((JSONObject) result);
             } else if(result instanceof Map) {
