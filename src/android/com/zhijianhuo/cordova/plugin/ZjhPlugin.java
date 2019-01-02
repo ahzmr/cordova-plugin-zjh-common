@@ -1,10 +1,12 @@
 package com.zhijianhuo.cordova.plugin;
 
+import android.app.Activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.text.ClipboardManager;
 import android.text.TextUtils;
@@ -139,6 +141,9 @@ public class ZjhPlugin extends BasePlugin {
             }
             SimpleResult<List<String>> result = SaveImagesPlugin.saveImages(cordova.getActivity().getApplication(), args.getJSONArray(0));
             returnForSimpleResult(callbackContext, result);
+        } else if("toSelfAction".equals(action)) {
+            SimpleResult<Object> result = toSelfAction(cordova.getActivity(), args.optString(0));
+            returnForSimpleResult(callbackContext, result);
         } else if("hasPermisssion".equals(action)) {
             if(hasPermisssion(getPermisssions(args.optJSONArray(0)))) {
                 callbackContext.success();
@@ -151,6 +156,25 @@ public class ZjhPlugin extends BasePlugin {
             return false;
         }
         return true;
+    }
+
+    private SimpleResult<Object> toSelfAction(Activity activity, String action) {
+        if (TextUtils.isEmpty(action)) {
+            return SimpleResult.newCommFailResult("参数action不能为空");
+        }
+        String appId = activity.getApplication().getPackageName();
+        Intent mIntent = new Intent();
+        mIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if ("setting".equals(action)) {
+            mIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+        } else if ("delete".equals(action)) {
+            mIntent.setAction(Intent.ACTION_DELETE);
+        } else {
+            mIntent.setAction(action.indexOf('.') > -1 ? action : "android.intent.action." + action);
+        }
+        mIntent.setData(Uri.fromParts("package", appId, null));
+        activity.startActivity(mIntent);
+        return SimpleResult.newSuccessResult(null);
     }
 
     private String[] getPermisssions(JSONArray array) {
